@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,17 +16,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1. Splash Screen (базовая версия)" translatesAutoresizingMaskIntoConstraints="NO" id="spD-3P-Zhg">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="hEc-9X-WnH">
+                                <rect key="frame" x="160" y="388" width="73" height="76"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="spD-3P-Zhg" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="OZL-Ly-f4J"/>
-                            <constraint firstItem="spD-3P-Zhg" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Sm8-Eu-Xso"/>
-                            <constraint firstItem="spD-3P-Zhg" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="bbD-UK-Ljk"/>
-                            <constraint firstAttribute="bottom" secondItem="spD-3P-Zhg" secondAttribute="bottom" id="oaZ-Hu-JIk"/>
+                            <constraint firstItem="hEc-9X-WnH" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="9z8-9n-fWx"/>
+                            <constraint firstItem="hEc-9X-WnH" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="uNA-H3-YfP"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,9 +34,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="1. Splash Screen (базовая версия)" width="375" height="812"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="Vector" width="73" height="76"/>
     </resources>
 </document>
