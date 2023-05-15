@@ -67,6 +67,7 @@ extension ImagesListViewController: UITableViewDelegate {
                 return cellHeight
     }
     
+    
 }
 
 extension ImagesListViewController {
