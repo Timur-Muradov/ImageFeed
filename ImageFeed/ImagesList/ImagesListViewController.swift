@@ -38,8 +38,6 @@ class ImagesListViewController: UIViewController {
                 super.prepare(for: segue, sender: sender) // 6
             }
         }
-    
-    
 }
 
 extension ImagesListViewController: UITableViewDataSource{
