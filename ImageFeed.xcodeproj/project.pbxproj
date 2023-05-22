@@ -14,6 +14,9 @@
 		7EC061B62A078BE700C976E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EC061B42A078BE700C976E3 /* Main.storyboard */; };
 		7EC061B82A078BE800C976E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EC061B72A078BE800C976E3 /* Assets.xcassets */; };
 		7EC061BB2A078BE800C976E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EC061B92A078BE800C976E3 /* LaunchScreen.storyboard */; };
+		7EF45AE02A164A0700A45411 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF45ADF2A164A0700A45411 /* SingleImageViewController.swift */; };
+		7EFC63252A12763A00BE57CB /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFC63242A12763A00BE57CB /* UIColor+Extensions.swift */; };
+		7EFC63272A1404AA00BE57CB /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFC63262A1404AA00BE57CB /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		7EC061B72A078BE800C976E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EC061BA2A078BE800C976E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7EC061BC2A078BE800C976E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EF45ADF2A164A0700A45411 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		7EFC63242A12763A00BE57CB /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		7EFC63262A1404AA00BE57CB /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +45,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E1B72D02A1B87AD00B7CE68 /* SingleImageView */ = {
+			isa = PBXGroup;
+			children = (
+				7EF45ADF2A164A0700A45411 /* SingleImageViewController.swift */,
+			);
+			path = SingleImageView;
+			sourceTree = "<group>";
+		};
 		7EB406122A0FF96C00367BBA /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
@@ -68,14 +82,33 @@
 			isa = PBXGroup;
 			children = (
 				7EB406122A0FF96C00367BBA /* ImagesList */,
+				7EFC63282A14089700BE57CB /* ProfileViewController */,
 				7EC061AE2A078BE700C976E3 /* AppDelegate.swift */,
 				7EC061B02A078BE700C976E3 /* SceneDelegate.swift */,
+				7E1B72D02A1B87AD00B7CE68 /* SingleImageView */,
+				7EFC63232A1275F700BE57CB /* Helpers */,
 				7EC061B42A078BE700C976E3 /* Main.storyboard */,
 				7EC061B72A078BE800C976E3 /* Assets.xcassets */,
 				7EC061B92A078BE800C976E3 /* LaunchScreen.storyboard */,
 				7EC061BC2A078BE800C976E3 /* Info.plist */,
 			);
 			path = ImageFeed;
+			sourceTree = "<group>";
+		};
+		7EFC63232A1275F700BE57CB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7EFC63242A12763A00BE57CB /* UIColor+Extensions.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		7EFC63282A14089700BE57CB /* ProfileViewController */ = {
+			isa = PBXGroup;
+			children = (
+				7EFC63262A1404AA00BE57CB /* ProfileViewController.swift */,
+			);
+			path = ProfileViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,7 +182,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EFC63272A1404AA00BE57CB /* ProfileViewController.swift in Sources */,
 				7EC061B32A078BE700C976E3 /* ImagesListViewController.swift in Sources */,
+				7EFC63252A12763A00BE57CB /* UIColor+Extensions.swift in Sources */,
+				7EF45AE02A164A0700A45411 /* SingleImageViewController.swift in Sources */,
 				7EB406112A0FF91B00367BBA /* ImagesListCell.swift in Sources */,
 				7EC061AF2A078BE700C976E3 /* AppDelegate.swift in Sources */,
 				7EC061B12A078BE700C976E3 /* SceneDelegate.swift in Sources */,
