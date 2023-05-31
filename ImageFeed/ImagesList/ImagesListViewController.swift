@@ -32,8 +32,7 @@ class ImagesListViewController: UIViewController {
                 let viewController = segue.destination as! SingleImageViewController // 2
                 let indexPath = sender as! IndexPath // 3
                 let image = UIImage(named: photosName[indexPath.row])// 4
-                _ = viewController.view
-                viewController.imageView.image = image // 5
+                viewController.image = image // 5
             } else {
                 super.prepare(for: segue, sender: sender) // 6
             }
@@ -63,6 +62,7 @@ extension ImagesListViewController: UITableViewDataSource{
 }
 
 extension ImagesListViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "ShowSingleImage", sender: indexPath)
     }
