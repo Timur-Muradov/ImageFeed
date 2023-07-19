@@ -4,15 +4,31 @@
 //
 //  Created by Тимур Мурадов on 16.05.2023.
 //
-
-import Foundation
 import UIKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     
+    private let profileService = ProfileService.shared
+    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
+    private let profileImageService = ProfileImageService.shared
+    private let placeholder = UIImage(named: "placeholder")
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private var profileImageView: UIImageView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .ypBlack
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+                    forName: ProfileImageService.didChangeNotification,
+                    object: nil,
+                    queue: .main
+                ){ [ weak self ] notification in
+                    guard let self = self else { return }
+                    self.updateAvatar()
+                }
+                updateAvatar()
+            
         let imageView = photofunc()
         let labelName = namefunc()
         let nickName = nNamefunc()
@@ -42,6 +58,28 @@ class ProfileViewController: UIViewController {
             
         ])
         
+    }
+    
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+        
+        profileImageView?.kf.indicatorType = .activity
+        profileImageView?.kf.setImage(with: url, placeholder: placeholder) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let image):
+                self.profileImageView?.image = image.image
+            case .failure:
+                self.profileImageView?.image = self.placeholder
+            }
+        }
     }
     
     func photofunc() -> UIImageView {
