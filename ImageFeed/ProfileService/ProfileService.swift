@@ -16,10 +16,16 @@ final class ProfileService {
     static let shared = ProfileService()
     private(set) var profile: Profile?
     private var currentTask: URLSessionTask?
+    private var lastToken: String?
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
+        if lastToken == token {
+            return
+        }
+
         currentTask?.cancel()
+        lastToken = token
         
         guard let request = makeFetchProfileRequest(token: token) else {
             assertionFailure ("Invalid request")
@@ -43,9 +49,10 @@ final class ProfileService {
     }
         
         private func makeFetchProfileRequest(token: String) -> URLRequest? {
-            URLRequestBuilder.makeHTTPRequest(
+            builder.makeHTTPRequest(
                 path: "/me",
-                httpMethod: "GET", baseURL: Constants.defaultApiBaseURLString)
+                httpMethod: "GET",
+                baseURL: Constants.defaultApiBaseURLString)
         }
     }
     

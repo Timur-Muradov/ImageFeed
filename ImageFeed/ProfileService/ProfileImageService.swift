@@ -15,11 +15,15 @@ final class ProfileImageService {
     private var currentTask: URLSessionTask?
     
     private (set) var avatarURL: String?
-    
+    private var lastUserName: String?
     private let urlBuilder = URLRequestBuilder.shared
     
     func fetchProfileImageURL(userName: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
+        
+        guard lastUserName != userName else { return }
+        currentTask?.cancel()
+        lastUserName = userName
         
         guard let request = makeRequest(userName: userName) else { return }
         
@@ -37,17 +41,18 @@ final class ProfileImageService {
                     object: self,
                     userInfo: [Notification.userInfoImageURLKey: mediumPhoto]
                 )
+                self.currentTask = nil
             case .failure(let error):
                 completion(.failure(error))
+                self.lastUserName = nil
             }
-            self.currentTask = nil
         }
         self.currentTask = task
         task.resume()
     }
     
     private func makeRequest(userName: String) -> URLRequest? {
-        URLRequestBuilder.makeHTTPRequest(
+        urlBuilder.makeHTTPRequest(
             path: "/users/\(userName)",
             httpMethod: "GET",
             baseURL: Constants.defaultApiBaseURLString

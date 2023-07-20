@@ -10,11 +10,13 @@ import Foundation
 final class URLRequestBuilder {
     
     static let shared = URLRequestBuilder()
-    static let storage: OAuth2TokenStorage = .shared// создаем отдельную зависимость для хранения токена
+    private let storage: OAuth2TokenStorage
     
-    private init() {} 
+    init(storage: OAuth2TokenStorage = .shared) {
+        self.storage = storage
+     }
     
-    static func makeHTTPRequest(path: String, httpMethod: String, baseURL: String) -> URLRequest? {
+     func makeHTTPRequest(path: String, httpMethod: String, baseURL: String) -> URLRequest? {
         guard
             let url = URL(string: baseURL),
             let baseUrl = URL(string: path, relativeTo: url)
@@ -23,8 +25,8 @@ final class URLRequestBuilder {
         var request = URLRequest(url: baseUrl)
         request.httpMethod = httpMethod
         
-        if let token = storage.token { //достает токен, полученный при запросе в OAuthService
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") // модифицируем request с помощью функции setValue
+        if let token = storage.token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         return request
     }

@@ -11,30 +11,27 @@ class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
-    private let profileImageService = ProfileImageService.shared
     private let placeholder = UIImage(named: "placeholder")
     private var profileImageServiceObserver: NSObjectProtocol?
-    private var profileImageView: UIImageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
         profileImageServiceObserver = NotificationCenter.default.addObserver(
-                    forName: ProfileImageService.didChangeNotification,
-                    object: nil,
-                    queue: .main
-                ){ [ weak self ] notification in
-                    guard let self = self else { return }
-                    self.updateAvatar()
-                }
-                updateAvatar()
-            
-        let imageView = photofunc()
-        let labelName = namefunc()
-        let nickName = nNamefunc()
-        let discription = discfunc()
-        let button = escButton()
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ){ [ weak self ] notification in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+        updateProfileDetales(profile: profileService.profile)
+        setupLayout()
         
+    }
+    
+    func setupLayout() {
         
         NSLayoutConstraint.activate([
             
@@ -53,11 +50,18 @@ class ProfileViewController: UIViewController {
             discription.leadingAnchor.constraint(equalTo: nickName.leadingAnchor),
             discription.topAnchor.constraint(equalTo: nickName.bottomAnchor, constant: 8),
             
-            button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
-            
+            escButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            escButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
         ])
         
+    }
+    
+    func updateProfileDetales(profile: Profile?) {
+        guard let profile = profile else { return }
+        
+        labelName.text = profile.name
+        nickName.text = profile.loginName
+        discription.text = profile.bio
     }
     
     
@@ -70,30 +74,31 @@ class ProfileViewController: UIViewController {
         cache.clearMemoryCache()
         cache.clearDiskCache()
         
-        profileImageView?.kf.indicatorType = .activity
-        profileImageView?.kf.setImage(with: url, placeholder: placeholder) { [weak self] result in
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: url, placeholder: placeholder) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let image):
-                self.profileImageView?.image = image.image
+                self.imageView.image = image.image
             case .failure:
-                self.profileImageView?.image = self.placeholder
+                self.imageView.image = self.placeholder
             }
         }
     }
     
-    func photofunc() -> UIImageView {
+    private lazy var imageView: UIImageView = {
         
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
-        
+        imageView.layer.cornerRadius = 35
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
         return imageView
         
-    }
+    }()
     
-    func namefunc() -> UILabel {
+    private lazy var labelName: UILabel = {
         
         let labelName = UILabel()
         labelName.text = "Екатерина Новикова"
@@ -103,9 +108,9 @@ class ProfileViewController: UIViewController {
         labelName.translatesAutoresizingMaskIntoConstraints = false
         return labelName
         
-    }
+    }()
     
-    func nNamefunc() -> UILabel {
+    private lazy var nickName: UILabel = {
         
         let nickName = UILabel()
         nickName.text = "@ekaterina_nov"
@@ -115,9 +120,9 @@ class ProfileViewController: UIViewController {
         nickName.translatesAutoresizingMaskIntoConstraints = false
         return nickName
         
-    }
+    }()
     
-    func discfunc() -> UILabel {
+    private lazy var discription: UILabel = {
         
         let discription = UILabel()
         discription.text = "Hello World"
@@ -127,21 +132,21 @@ class ProfileViewController: UIViewController {
         discription.translatesAutoresizingMaskIntoConstraints = false
         return discription
         
-    }
+    }()
     
-    func escButton() -> UIButton {
+    private lazy var escButton: UIButton = {
         
         let button = UIButton.systemButton(
             with: UIImage(systemName: "ipad.and.arrow.forward")!,
             target: self,
             action: #selector(Self.didTapButton)
         )
-        button.tintColor = .red
+        button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(button)
         return button
         
-    }
+    }()
     
     @objc
     private func didTapButton() {

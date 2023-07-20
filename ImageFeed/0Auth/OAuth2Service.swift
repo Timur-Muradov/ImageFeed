@@ -68,7 +68,7 @@ final class OAuth2Service {
 
 extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest? {
-        URLRequestBuilder.makeHTTPRequest(
+        builder.makeHTTPRequest(
             path: "oauth/token"
             + "?client_id=\(Constants.AccessKey)"
             + "&&client_secret=\(Constants.SecretKey)"
