@@ -8,8 +8,12 @@
 import UIKit
 
 class ImagesListViewController: UIViewController {
+    
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
+    private let imagesListService = ImagesListService.shared
+    private var imagesListServiceObserver: NSObjectProtocol?
+    private var photos: [Photo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +32,22 @@ class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.identifier == "ShowSingleImage" { // 1
-                let viewController = segue.destination as! SingleImageViewController // 2
-                let indexPath = sender as! IndexPath // 3
-                let image = UIImage(named: photosName[indexPath.row])// 4
-                viewController.image = image // 5
+            if segue.identifier == "ShowSingleImage" {
+                let viewController = segue.destination as! SingleImageViewController
+                let indexPath = sender as! IndexPath
+                let image = UIImage(named: photosName[indexPath.row])
+                viewController.image = image
             } else {
-                super.prepare(for: segue, sender: sender) // 6
+                super.prepare(for: segue, sender: sender)
             }
         }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+            if indexPath.row + 1 == photos.count {
+                let service = ImagesListService()
+                service.fetchPhotoNextPage()
+            }
+        }
     
 }
 
