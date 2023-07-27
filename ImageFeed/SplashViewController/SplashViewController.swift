@@ -45,6 +45,10 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        checkToken()
+    }
+    
+    func checkToken() {
         if let token = oauth2TokenStorage.token {
             UIBlockingProgressHUD.show()
             self.fetchProfile(token: token)
@@ -72,6 +76,7 @@ final class SplashViewController: UIViewController {
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
+        window.makeKeyAndVisible()
     }
 }
 
@@ -143,7 +148,8 @@ extension SplashViewController: AuthViewControllerDelegate {
     private func showLoginAlert(error: Error) {
         alertPresenter.showAlert(title: "Что-то пошло не так",
                                  message: "Не удалось войти в систему, \(error.localizedDescription)") {
-            self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
+//            self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
+            self.checkToken()
         }
     }
 }

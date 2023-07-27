@@ -35,9 +35,11 @@ struct PhotoResult: Decodable {
     let description: String?
     let urls: UrlsResult
     let likedByUser: Bool
+    
 }
 
 struct UrlsResult: Decodable {
     let full: String
     let thumb: String
+    
 }

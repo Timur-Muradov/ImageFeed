@@ -16,7 +16,6 @@ final class ImagesListService {
     
     private var lastLoadedPage: Int?
     private var currentTask: URLSessionTask?
-    private let perPage = "10"
     private let dateFormat = ISO8601DateFormatter()
     private let builder: URLRequestBuilder
     

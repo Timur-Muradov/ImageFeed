@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SingleImageViewController: UIViewController {
 
@@ -15,11 +16,10 @@ class SingleImageViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    var image: UIImage! {
+    var image: URL? {
             didSet {
                 guard isViewLoaded else { return }
-                imageView.image = image
-                rescaleAndCenterImageInScrollView(image: image)
+                showImage(url: image)
             }
         }
 
@@ -30,10 +30,24 @@ class SingleImageViewController: UIViewController {
         
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
-        
+        showImage(url: image)
        }
+    
+    func showImage(url: URL?) {
+        guard let url = url else { return }
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: url) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showAlert(url: url)
+            }
+            
+        }
+    }
     
     @IBAction func didTapShareButton(_ sender: UIButton) {
         let share = UIActivityViewController(
@@ -58,6 +72,18 @@ class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    fileprivate func showAlert(url: URL?) {
+        let alert = UIAlertController(title: "что-то пошло не так", message: "попробуй еще раз", preferredStyle: .alert)
+        let action = UIAlertAction(title: "повторить", style: .default)
+        let cancelAction = UIAlertAction(title: "не надо", style: .cancel) { [weak self] _ in
+            guard let self = self else { return }
+            self.showImage(url: url)
+        }
+        alert.addAction(action)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
     }
     
 }
