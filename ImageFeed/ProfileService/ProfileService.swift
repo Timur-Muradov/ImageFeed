@@ -19,36 +19,37 @@ final class ProfileService {
     private var lastToken: String?
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        
-        if lastToken == token {
-            return
-        }
+        assert(Thread.isMainThread)
+       
 
         currentTask?.cancel()
-        lastToken = token
         
-        guard let request = makeFetchProfileRequest(token: token) else {
+        
+        guard let request = makeFetchProfileRequest() else {
             assertionFailure ("Invalid request")
             completion(.failure (NetworkError.urlSessionError))
             return
         }
         
         let session = URLSession.shared
-        currentTask = session.objectTask(for: request) {
+        let task = session.objectTask(for: request) {
             [weak self] (response: Result<ProfileResult, Error>) in
-            self?.currentTask = nil
+            guard let self = self else { return }
             switch response {
             case .success(let profileResult):
                 let profile = Profile(result: profileResult)
-                self?.profile = profile
+                self.profile = profile
                 completion(.success(profile))
+                self.currentTask = nil
             case .failure(let error):
                 completion(.failure (error))
             }
         }
+        self.currentTask = task
+        task.resume()
     }
         
-        private func makeFetchProfileRequest(token: String) -> URLRequest? {
+        private func makeFetchProfileRequest() -> URLRequest? {
             builder.makeHTTPRequest(
                 path: "/me",
                 httpMethod: "GET",
