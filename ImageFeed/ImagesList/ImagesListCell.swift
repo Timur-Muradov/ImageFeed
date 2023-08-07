@@ -15,6 +15,7 @@ protocol ImagesListCellDelegate: AnyObject {
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     
+    
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -58,10 +59,13 @@ final class ImagesListCell: UITableViewCell {
                 self.cellImage.image = self.placeholder
             }
         }
-        
-        dateLabel.text = dateFormatter.string(from: photos.createdAt ?? Date())
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.autoupdatingCurrent
+        dateFormatter.dateFormat = "d MMMM yyyy"
+        dateLabel.text = (photos.createdAt != nil) ? dateFormatter.string(from: photos.createdAt!) : ""
         setIsLiked(isLiked: photos.isLiked)
     }
+    
     
     public func setIsLiked(isLiked: Bool) {
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")

@@ -25,8 +25,8 @@ final class ImagesListService {
     
     func fetchPhotoNextPage() {
         assert(Thread.isMainThread)
-        if currentTask != nil {
-            currentTask?.cancel()
+        if let currentTask = currentTask, currentTask.state == .running {
+            return
         }
         let nextPage = lastLoadedPage == nil ? 1 : (lastLoadedPage! + 1)
         guard let request = fetchImagesRequest(page: nextPage) else {
@@ -105,7 +105,6 @@ final class ImagesListService {
                 case .failure(let error):
                     completion(.failure(error))
                 }
-                self.currentTask = nil
             }
         }
         self.currentTask = task
