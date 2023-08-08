@@ -24,4 +24,8 @@ final class OAuth2TokenStorage: UIViewController {
         }
     }
     
+    func clean() {
+           keychainWrapper.removeAllKeys()
+       }
+    
 }

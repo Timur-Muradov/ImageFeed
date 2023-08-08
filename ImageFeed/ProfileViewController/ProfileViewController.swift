@@ -150,7 +150,32 @@ class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        print("Здравствуй, многоуважаемый ревьюер :)")
+        byebyeAlert(title: "Пока-пока!", message: "Уверены, что хотите выйти?") {
+            self.logout()
+        }
+    }
+    
+    func logout() {
+        OAuth2TokenStorage.shared.clean()
+        WebViewViewController.clean()
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            let window = windowScene.windows.first
+            
+            window?.rootViewController = SplashViewController()
+            window?.makeKeyAndVisible()
+        }
+    }
+    
+    private func byebyeAlert(title: String, message: String, handler: @escaping () -> Void) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            handler()
+        }
+        let noAction = UIAlertAction(title: "Нет", style: .default) { _ in }
         
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
     }
 }
+

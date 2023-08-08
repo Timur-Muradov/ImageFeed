@@ -10,7 +10,7 @@ enum Constants {
     
     // MARK: Unsplash api base paths
     static let defaultApiBaseURLString = "https://api.unsplash.com"
-    static let baseURLString = "https://unsplash.com"
+    static let baseURLString = "https://api.unsplash.com"
     static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     static let baseAuthTokenPath = "/oauth/token"
     
