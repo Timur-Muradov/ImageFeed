@@ -8,16 +8,28 @@
 import UIKit
 import Kingfisher
 
-class ImagesListViewController: UIViewController {
+private extension ImagesListViewController {
+    struct Constants {
+        static let imageCellIdentifier = "ShowSingleImage"
+        static let tableContentInset = 12.0
+        static let imageHorizontalInset = 16.0
+        static let imageVerticalInset = 4.0
+    }
+}
+
+final class ImagesListViewController: UIViewController {
     
-    private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
     private var imagesListServiceObserver: NSObjectProtocol?
     private var photos: [Photo] = []
-    
+    @IBOutlet private var tableView: UITableView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: Constants.tableContentInset,
+                                              left: 0,
+                                              bottom: Constants.tableContentInset,
+                                              right: 0)
         
         imagesListServiceObserver = NotificationCenter.default.addObserver(
             forName: ImagesListService.didChangeNotification,
@@ -30,11 +42,8 @@ class ImagesListViewController: UIViewController {
         imagesListService.fetchPhotoNextPage()
     }
     
-    
-    @IBOutlet private var tableView: UITableView!
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowSingleImage" {
+        if segue.identifier == Constants.imageCellIdentifier {
             let viewController = segue.destination as! SingleImageViewController
             let indexPath = sender as! IndexPath
             let image = photos[indexPath.row].largeImageURL
@@ -89,12 +98,15 @@ extension ImagesListViewController: UITableViewDataSource{
 extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "ShowSingleImage", sender: indexPath)
+        performSegue(withIdentifier: Constants.imageCellIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let image = photos[indexPath.row]
-        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let imageInsets = UIEdgeInsets(top: Constants.imageVerticalInset,
+                                       left: Constants.imageHorizontalInset,
+                                       bottom: Constants.imageVerticalInset,
+                                       right: Constants.imageHorizontalInset)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         let imageWidth = image.size.width
         let scale = imageViewWidth / imageWidth
@@ -102,8 +114,6 @@ extension ImagesListViewController: UITableViewDelegate {
         
         return cellHeight
     }
-    
-    
 }
 
 extension ImagesListViewController: ImagesListCellDelegate {

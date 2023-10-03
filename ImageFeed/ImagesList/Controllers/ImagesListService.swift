@@ -64,7 +64,7 @@ final class ImagesListService {
         return builder.makeHTTPRequest(
             path: "/photos" + "?page=\(page)&per_page=10",
             httpMethod: "GET",
-            baseURL: Constants.baseURLString
+            baseURL: baseURLString
         )
     }
     
@@ -119,7 +119,7 @@ final class ImagesListService {
         return builder.makeHTTPRequest(
             path: "photos/\(photoId)/like",
             httpMethod: isLike ? "POST" : "DELETE",
-            baseURL: Constants.baseURLString
+            baseURL: baseURLString
         )
     }
 }
