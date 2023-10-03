@@ -1,5 +1,5 @@
 //
-//  ImageListServiceProtocol.swift
+//  ImagesListServiceProtocol.swift
 //  ImageFeed
 //
 //  Created by Тимур Мурадов on 28.09.2023.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ImageListServiceProtocol {
+protocol ImagesListServiceProtocol {
     var photos: [Photo] { get }
     func fetchPhotoNextPage()
     func fetchImagesRequest(page: Int) -> URLRequest?

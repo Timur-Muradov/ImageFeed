@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+extension Array {
+    func withReplaced(itemAt index: Int, newValue: Element) -> Array {
+        var photos = self
+        photos[index] = newValue
+        return photos
+    }
+}

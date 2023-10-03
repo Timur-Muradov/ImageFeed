@@ -1,5 +1,5 @@
 //
-//  ImagesListViewController+CellDelegate.swift
+//  ImagesListPresenter+CellDelegate.swift
 //  ImageFeed
 //
 //  Created by Тимур Мурадов on 28.09.2023.
@@ -7,16 +7,15 @@
 
 import UIKit
 
-extension ImagesListViewController: ImagesListCellDelegate {
+extension ImagesListPresenter: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        let photo = photos[indexPath.row]
+        guard let indexPath = view?.tableView.indexPath(for: cell) else { return }
+        let photo = ImagesListService.shared.photos[indexPath.row]
         UIBlockingProgressHUD.show()
         ImagesListService.shared.changeLike(photoId: photo.id, isLike: !photo.isLiked) { result in
             switch result {
             case.success:
-                self.photos = ImagesListService.shared.photos
-                cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                cell.setIsLiked(isLiked: ImagesListService.shared.photos[indexPath.row].isLiked)
                 UIBlockingProgressHUD.dismiss()
             case.failure(let error):
                 UIBlockingProgressHUD.dismiss()
@@ -31,6 +30,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: ImagesMessage.likeAlertActionTitle.rawValue,
                                       style: .cancel))
-        self.present(alert, animated: true, completion: nil)
+        self.view?.present(alert)
     }
 }

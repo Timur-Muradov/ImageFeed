@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct LikedPhoto: Decodable {
+    let photo: PhotoResult
+}

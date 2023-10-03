@@ -1,5 +1,5 @@
 //
-//  ImagesListViewController+TableViewDelegate.swift
+//  ImagesListPresenter+TableViewDelegate.swift
 //  ImageFeed
 //
 //  Created by Тимур Мурадов on 28.09.2023.
@@ -7,13 +7,14 @@
 
 import UIKit
 
-extension ImagesListViewController: UITableViewDelegate {
+extension ImagesListPresenter: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: ImagesMessage.singleImageViewControllerIdentifier.rawValue, sender: indexPath)
+        let image = ImagesListService.shared.photos[indexPath.row].largeImageURL
+        self.view?.present(for: indexPath, image: image)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let image = photos[indexPath.row]
+        let image = ImagesListService.shared.photos[indexPath.row]
         let imageInsets = UIEdgeInsets(top: ContentInset.imageVertical,
                                        left: ContentInset.imageHorizontal,
                                        bottom: ContentInset.imageVertical,
@@ -27,7 +28,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == photos.count {
+        if indexPath.row + 1 == ImagesListService.shared.photos.count {
             ImagesListService.shared.fetchPhotoNextPage()
         }
     }

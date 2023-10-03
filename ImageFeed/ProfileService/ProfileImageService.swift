@@ -8,7 +8,12 @@
 import Foundation
 import UIKit
 
-final class ProfileImageService {
+protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    func fetchProfileImageURL(_ username: String, completion: @escaping (Result<String, Error>) -> Void)
+}
+
+final class ProfileImageService: ProfileImageServiceProtocol {
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
@@ -18,7 +23,7 @@ final class ProfileImageService {
     private var lastUserName: String?
     private let urlBuilder = URLRequestBuilder.shared
     
-    func fetchProfileImageURL(userName: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func fetchProfileImageURL(_ userName: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
         guard lastUserName != userName else { return }
@@ -55,7 +60,7 @@ final class ProfileImageService {
         urlBuilder.makeHTTPRequest(
             path: "/users/\(userName)",
             httpMethod: "GET",
-            baseURL: Constants.defaultApiBaseURLString
+            baseURL: defaultApiBaseURLString
         )
     }
 }

@@ -8,12 +8,10 @@
 import Foundation
 import UIKit
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     static let shared = ImagesListService()
-    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-    
-    private (set) var photos: [Photo] = []
-    
+    private(set) var photos: [Photo] = []
+    private(set) var lastPhotosCount: Int = 0
     private var lastLoadedPage: Int?
     private var currentTask: URLSessionTask?
     private let dateFormat = ISO8601DateFormatter()
@@ -28,9 +26,10 @@ final class ImagesListService {
         if let currentTask = currentTask, currentTask.state == .running {
             return
         }
+        lastPhotosCount = photos.count
         let nextPage = lastLoadedPage == nil ? 1 : (lastLoadedPage! + 1)
         guard let request = fetchImagesRequest(page: nextPage) else {
-            assertionFailure("Invalid Request")
+            assertionFailure(ImagesMessage.fetchAssertionFailure.rawValue)
             return
         }
         
@@ -46,12 +45,12 @@ final class ImagesListService {
                         self.lastLoadedPage! += 1
                     }
                     let newPhoto = newPhotoResult.map { Photo(photoResult: $0, dateFormat: self.dateFormat) }
-                    self.photos.append(contentsOf: newPhoto) 
+                    self.photos.append(contentsOf: newPhoto)
                     
-                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+                    NotificationCenter.default.post(name: NotificationNames.didChange, object: nil)
                     
                 case .failure(let error):
-                    print("Fail to fetch photos \(error)")
+                    print(ImagesMessage.failToFetchPhotos.rawValue + "\(error)")
                     
                 }
             }
@@ -62,8 +61,8 @@ final class ImagesListService {
     
     func fetchImagesRequest(page: Int) -> URLRequest? {
         return builder.makeHTTPRequest(
-            path: "/photos" + "?page=\(page)&per_page=10",
-            httpMethod: "GET",
+            path: URLParameters.photosPage(number: page).rawValue,
+            httpMethod: HTTPMethod.get.rawValue,
             baseURL: baseURLString
         )
     }
@@ -75,7 +74,7 @@ final class ImagesListService {
         }
         
         guard let request = makeLikeRequest(isLike: isLike, photoId: photoId) else {
-            assertionFailure("Like's empty")
+            assertionFailure(ImagesMessage.likeIsEmpty.rawValue)
             return
         }
         
@@ -92,8 +91,10 @@ final class ImagesListService {
                             createdAt: photo.createdAt?.description,
                             width: Int(photo.size.width),
                             height: Int(photo.size.height),
-                            description: photo.welcomeDescription ?? "",
-                            urls: UrlsResult(full: photo.largeImageURL, thumb: photo.thumbImageURL),
+                            description: photo.welcomeDescription ??
+                            ImagesMessage.empty.rawValue,
+                            urls: UrlsResult(full: photo.largeImageURL,
+                                             thumb: photo.thumbImageURL),
                             likedByUser: !photo.isLiked
                         )
                         let newPhoto = Photo(
@@ -110,24 +111,14 @@ final class ImagesListService {
         self.currentTask = task
         task.resume()
     }
-    
-    struct LikedPhoto: Decodable {
-        let photo: PhotoResult
-    }
-    
-    private func makeLikeRequest(isLike: Bool, photoId: String) -> URLRequest? {
-        return builder.makeHTTPRequest(
-            path: "photos/\(photoId)/like",
-            httpMethod: isLike ? "POST" : "DELETE",
-            baseURL: baseURLString
-        )
-    }
 }
 
-extension Array {
-    func withReplaced(itemAt index: Int, newValue: Element) -> Array {
-        var photos = self
-        photos[index] = newValue
-        return photos
+private extension ImagesListService {
+    func makeLikeRequest(isLike: Bool, photoId: String) -> URLRequest? {
+        return builder.makeHTTPRequest(
+            path: "photos/\(photoId)/like",
+            httpMethod: isLike ? HTTPMethod.post.rawValue : HTTPMethod.delete.rawValue,
+            baseURL: baseURLString
+        )
     }
 }

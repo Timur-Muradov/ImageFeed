@@ -7,28 +7,37 @@
 import UIKit
 import Kingfisher
 
-class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateProfileDetales(name: String, login: String, bio: String)
+    func setupAvatar(url: URL)
+}
+
+class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    
+    var presenter: ProfileViewPresenterProtocol? = {
+        return ProfileViewPresenter() }()
     
     private let profileService = ProfileService.shared
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
-    private let placeholder = UIImage(named: "placeholder")
+    private let placeholder = UIImage(named: ProfileViewConstants.profilePlaceholder)
     private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ){ [ weak self ] notification in
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
-        updateAvatar()
-        updateProfileDetales(profile: profileService.profile)
-        setupLayout()
+        presenter?.view = self
+        presenter?.updateProfileDetails()
         
+        setupLayout()
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeNotification,
+                         object: nil,
+                         queue: .main
+            ) { [weak self] _ in
+                guard let self else { return }
+                self.presenter?.updateAvatar()
+            }
     }
     
     func setupLayout() {
@@ -56,20 +65,19 @@ class ProfileViewController: UIViewController {
         
     }
     
-    func updateProfileDetales(profile: Profile?) {
-        guard let profile = profile else { return }
-        
-        labelName.text = profile.name
-        nickName.text = profile.loginName
-        discription.text = profile.bio
+    func updateProfileDetales(name: String, login: String, bio: String) {
+        //guard let profile = profile else { return }
+        labelName.text = name
+        nickName.text = login
+        discription.text = bio
     }
     
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
+    func setupAvatar(url: URL) {
+        //        guard
+        //            let profileImageURL = ProfileImageService.shared.avatarURL,
+        //            let url = URL(string: profileImageURL)
+        //        else { return }
         let cache = ImageCache.default
         cache.clearMemoryCache()
         cache.clearDiskCache()
@@ -88,7 +96,7 @@ class ProfileViewController: UIViewController {
     
     private lazy var imageView: UIImageView = {
         
-        let profileImage = UIImage(named: "Photo")
+        let profileImage = UIImage(named: ProfileViewConstants.profileImage)
         let imageView = UIImageView(image: profileImage)
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
@@ -101,7 +109,7 @@ class ProfileViewController: UIViewController {
     private lazy var labelName: UILabel = {
         
         let labelName = UILabel()
-        labelName.text = "Екатерина Новикова"
+        labelName.text = ProfileViewConstants.profilelabelName
         labelName.textColor = .ypWhite
         labelName.font = UIFont.systemFont(ofSize: 23)
         view.addSubview(labelName)
@@ -113,7 +121,7 @@ class ProfileViewController: UIViewController {
     private lazy var nickName: UILabel = {
         
         let nickName = UILabel()
-        nickName.text = "@ekaterina_nov"
+        nickName.text = ProfileViewConstants.profileNickName
         nickName.textColor = .ypGray
         nickName.font = UIFont.systemFont(ofSize: 13)
         view.addSubview(nickName)
@@ -125,7 +133,7 @@ class ProfileViewController: UIViewController {
     private lazy var discription: UILabel = {
         
         let discription = UILabel()
-        discription.text = "Hello World"
+        discription.text = ProfileViewConstants.profileDiscription
         discription.textColor = .ypWhite
         discription.font = UIFont.systemFont(ofSize: 13)
         view.addSubview(discription)
@@ -137,7 +145,7 @@ class ProfileViewController: UIViewController {
     private lazy var escButton: UIButton = {
         
         let button = UIButton.systemButton(
-            with: UIImage(systemName: "ipad.and.arrow.forward")!,
+            with: UIImage(systemName: ProfileViewConstants.profileEscButton)!,
             target: self,
             action: #selector(Self.didTapButton)
         )
@@ -150,7 +158,8 @@ class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        byebyeAlert(title: "Пока-пока!", message: "Уверены, что хотите выйти?") {
+        byebyeAlert(title: ProfileViewConstants.profileDidTapButtonTitle,
+                    message: ProfileViewConstants.profiledidTapButtonMessage) {
             self.logout()
         }
     }
@@ -167,15 +176,18 @@ class ProfileViewController: UIViewController {
     }
     
     private func byebyeAlert(title: String, message: String, handler: @escaping () -> Void) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: ProfileViewConstants.byeByeAlertTitleYesAction,
+                                      style: .default) { _ in
             handler()
         }
-        let noAction = UIAlertAction(title: "Нет", style: .default) { _ in }
+        let noAction = UIAlertAction(title: ProfileViewConstants.byeByeAlertTitleNoAction,
+                                     style: .default) { _ in }
         
         alert.addAction(yesAction)
         alert.addAction(noAction)
         present(alert, animated: true)
     }
 }
-
