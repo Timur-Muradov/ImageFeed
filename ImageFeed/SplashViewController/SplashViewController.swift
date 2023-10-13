@@ -126,7 +126,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success(_):
                 guard let user = self.profileService.profile?.username
                 else { return }
-                self.profileImageService.fetchProfileImageURL(userName: user) { _ in }
+                self.profileImageService.fetchProfileImageURL(user) { _ in }
                 self.switchToTabBarController()
             case .failure(let error):
                 self.showLoginAlert(error: error)

@@ -13,9 +13,6 @@ protocol ImagesListCellDelegate: AnyObject {
 }
 
 final class ImagesListCell: UITableViewCell {
-    static let reuseIdentifier = "ImagesListCell"
-    
-    
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -23,7 +20,7 @@ final class ImagesListCell: UITableViewCell {
         return formatter
     }()
     
-    private let placeholder = UIImage(named: "image_stub")
+    private let placeholder = UIImage(named: ImagesMessage.imagePlaceholder.rawValue)
     
     weak var delegate: ImagesListCellDelegate?
     
@@ -61,14 +58,17 @@ final class ImagesListCell: UITableViewCell {
         }
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.autoupdatingCurrent
-        dateFormatter.dateFormat = "d MMMM yyyy"
-        dateLabel.text = (photos.createdAt != nil) ? dateFormatter.string(from: photos.createdAt!) : ""
+        dateFormatter.dateFormat = ImagesMessage.updateCellDateFormat.rawValue
+        dateLabel.text = (photos.createdAt != nil)
+        ? dateFormatter.string(from: photos.createdAt!)
+        : ImagesMessage.empty.rawValue
         setIsLiked(isLiked: photos.isLiked)
     }
-    
-    
+        
     public func setIsLiked(isLiked: Bool) {
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        let likeImage = isLiked ?
+        UIImage(named: ImagesMessage.likeButtonOn.rawValue) :
+        UIImage(named: ImagesMessage.likeButtonOff.rawValue)
         likeButton.setImage(likeImage, for: .normal)
     }
 }

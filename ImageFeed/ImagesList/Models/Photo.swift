@@ -1,8 +1,8 @@
 //
-//  ImageListStructures.swift
+//  Photo.swift
 //  ImageFeed
 //
-//  Created by Тимур Мурадов on 24.07.2023.
+//  Created by Тимур Мурадов on 28.09.2023.
 //
 
 import Foundation
@@ -25,21 +25,4 @@ struct Photo: Codable {
         self.largeImageURL = photoResult.urls.full
         self.isLiked = photoResult.likedByUser
     }
-}
-
-struct PhotoResult: Decodable {
-    let id: String
-    let createdAt: String?
-    let width: Int
-    let height: Int
-    let description: String?
-    let urls: UrlsResult
-    let likedByUser: Bool
-    
-}
-
-struct UrlsResult: Decodable {
-    let full: String
-    let thumb: String
-    
 }

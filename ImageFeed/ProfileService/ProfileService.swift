@@ -7,7 +7,12 @@
 
 import Foundation
 
-final class ProfileService {
+protocol ProfileServiceProtocol {
+    var profile: Profile? { get }
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void)
+}
+
+final class ProfileService: ProfileServiceProtocol {
     
     private let builder: URLRequestBuilder
     init(builder: URLRequestBuilder = .shared) {
@@ -37,7 +42,7 @@ final class ProfileService {
             guard let self = self else { return }
             switch response {
             case .success(let profileResult):
-                let profile = Profile(result: profileResult)
+                let profile = Profile(ProfileResult: profileResult)
                 self.profile = profile
                 completion(.success(profile))
                 self.currentTask = nil
@@ -53,7 +58,7 @@ final class ProfileService {
             builder.makeHTTPRequest(
                 path: "/me",
                 httpMethod: "GET",
-                baseURL: Constants.defaultApiBaseURLString)
+                baseURL: defaultApiBaseURLString)
         }
     }
     
