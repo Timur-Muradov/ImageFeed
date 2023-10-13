@@ -149,6 +149,7 @@ class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
             target: self,
             action: #selector(Self.didTapButton)
         )
+        button.accessibilityIdentifier = "escButton"
         button.tintColor = .ypRed
         button.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(button)

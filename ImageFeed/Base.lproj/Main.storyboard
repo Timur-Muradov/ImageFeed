@@ -62,8 +62,9 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lhx-xr-wFF">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lhx-xr-wFF">
                                                     <rect key="frame" x="368" y="0.0" width="44" height="44"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="like_button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="44" id="2dd-6a-TPS"/>
                                                         <constraint firstAttribute="height" constant="44" id="6wD-bA-3Me"/>
@@ -148,8 +149,9 @@
                                     <outlet property="delegate" destination="q0M-a1-o9Z" id="QFI-bK-oY3"/>
                                 </connections>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I02-gG-f4c">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I02-gG-f4c">
                                 <rect key="frame" x="16" y="56" width="48" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="nav_back_button_white"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="2nD-Gi-yu9"/>
                                     <constraint firstAttribute="height" constant="48" id="EFO-lP-EMz"/>
@@ -208,9 +210,10 @@
                                     <constraint firstAttribute="height" constant="60" id="WRD-UO-5QM"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gqg-3q-6Gi">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gqg-3q-6Gi" userLabel="Authenticate">
                                 <rect key="frame" x="16" y="752" width="396" height="50"/>
                                 <color key="backgroundColor" name="YP White (iOS)"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Ozh-w2-uz8"/>
                                 </constraints>
